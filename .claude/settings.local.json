@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Edit",
+      "Write",
+      "WebFetch",
+      "Agent",
+      "mcp__github",
+      "mcp__playwright",
+      "mcp__figma"
+    ]
+  }
+}

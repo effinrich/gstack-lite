@@ -66,6 +66,10 @@ After `/plan-ceo-review` has locked the product direction. Now make it technical
    - Data flow from input → storage → output
    - Sync vs. async boundaries (what goes to a background job?)
    - State transitions (draw a state diagram if non-trivial)
+   - For any React app with reusable components, Storybook is required. Plan story
+     coverage for shared components and key states (happy, empty, loading, error),
+     plus automation for interaction tests, accessibility checks, and visual
+     regression in CI (Chromatic or equivalent if available)
 
 4. **Failure modes.** For every new codepath, answer:
    - What happens if this step fails?
@@ -96,3 +100,4 @@ After `/plan-ceo-review` has locked the product direction. Now make it technical
 - [ ] Trust boundaries identified
 - [ ] Test matrix written
 - [ ] Observability defined
+- [ ] If React app with components: Storybook plan and automation scope defined
