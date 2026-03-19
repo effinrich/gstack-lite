@@ -30,6 +30,10 @@ Run this sequence non-interactively. No back-and-forth. No asking what to do nex
    npx tsc --noEmit
    ```
    All must pass. If tests fail, fix root cause — never skip or comment out.
+   If the repo is a React app with reusable components, also run the project's
+   Storybook automation from `CLAUDE.md` / package scripts — at minimum a static
+   Storybook build, plus interaction, accessibility, and visual regression checks
+   when configured.
 
 3. **Greptile triage** (if applicable)
    Pull open Greptile comments. Classify each (VALID / ALREADY FIXED / FALSE POSITIVE).
@@ -52,6 +56,7 @@ Run this sequence non-interactively. No back-and-forth. No asking what to do nex
    - What changed and why (product language, not diff summary)
    - Testing done
    - Screenshots for UI changes
+   - Storybook / Chromatic link for React UI changes, if available
    - Greptile review section if applicable (VALID fixed, FP explained)
 
 #### Rules

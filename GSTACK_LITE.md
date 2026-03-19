@@ -2,6 +2,10 @@
 
 A condensed, dependency-free port of [Garry Tan's gstack](https://github.com/garrytan/gstack) — five workflow skills for AI-assisted development as a single file. No Bun, no compiled binary, no dependencies.
 
+The slash-command names in this document are **mode labels**. If your coding
+agent does not support slash commands, invoke the same modes with plain-language
+prompts instead.
+
 ## Skills Overview
 
 | Command | Mode | Purpose |
@@ -83,6 +87,10 @@ After `/plan-ceo-review` has locked the product direction. Now make it technical
    - Data flow from input → storage → output
    - Sync vs. async boundaries (what goes to a background job?)
    - State transitions (draw a state diagram if non-trivial)
+   - For any React app with reusable components, Storybook is required. Plan story
+     coverage for shared components and key states (happy, empty, loading, error),
+     plus automation for interaction tests, accessibility checks, and visual
+     regression in CI (Chromatic or equivalent if available)
 
 4. **Failure modes.** For every new codepath, answer:
    - What happens if this step fails?
@@ -113,6 +121,7 @@ After `/plan-ceo-review` has locked the product direction. Now make it technical
 - [ ] Trust boundaries identified
 - [ ] Test matrix written
 - [ ] Observability defined
+- [ ] If React app with components: Storybook plan and automation scope defined
 
 ---
 
@@ -162,6 +171,8 @@ Work through the diff and look for:
 - Missing concurrency tests for race-prone code
 - Happy path only — no sad path, no edge cases
 - For LLM changes: are eval suites updated?
+- For React apps with components: are Storybook stories present for shared
+  components and key states, with interaction/a11y/visual regression automation?
 
 ### Output Format
 
@@ -199,6 +210,7 @@ are available at review time. Triage each comment:
 - [ ] Retry logic: correct backoff, idempotent operations
 - [ ] Auth: all new routes protected
 - [ ] Tests: sad paths and edge cases covered
+- [ ] React UI: Storybook coverage + automation present where applicable
 - [ ] Escaping: no injection vectors
 - [ ] Greptile comments triaged (if applicable)
 
@@ -232,6 +244,10 @@ Run this sequence non-interactively. No back-and-forth. No asking what to do nex
    npx tsc --noEmit
    ```
    All must pass. If tests fail, fix root cause — never skip or comment out.
+   If the repo is a React app with reusable components, also run the project's
+   Storybook automation from `CLAUDE.md` / package scripts — at minimum a static
+   Storybook build, plus interaction, accessibility, and visual regression checks
+   when configured.
 
 3. **Greptile triage** (if applicable)
    Pull open Greptile comments. Classify each (VALID / ALREADY FIXED / FALSE POSITIVE).
@@ -254,6 +270,7 @@ Run this sequence non-interactively. No back-and-forth. No asking what to do nex
    - What changed and why (product language, not diff summary)
    - Testing done
    - Screenshots for UI changes
+   - Storybook / Chromatic link for React UI changes, if available
    - Greptile review section if applicable (VALID fixed, FP explained)
 
 #### Rules
@@ -352,6 +369,39 @@ mkdir -p .claude/skills
 #   .claude/skills/REVIEW.md         (/review)
 #   .claude/skills/SHIP-RETRO.md     (/ship + /retro)
 ```
+
+## React + Storybook defaults
+
+For React app repos with reusable components, use
+`gstack-lite-storybook.md` as the repo-specific Storybook/Chromatic companion
+doc, and optionally paste relevant sections into `CLAUDE.md`. Standardize on
+these package scripts:
+
+```json
+{
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "test-storybook": "<your storybook test command>",
+    "chromatic": "chromatic"
+  }
+}
+```
+
+Conventions:
+- `build-storybook` is required for CI on UI changes.
+- `test-storybook` should run interaction tests and accessibility checks where
+  the repo supports them.
+- `chromatic` is the preferred visual regression check; it uses the
+  `build-storybook` script by default.
+- If the repo includes a design system, component library, or roughly `10+`
+  reusable components, `chromatic` becomes required and its UI test check should
+  block merges.
+- In those larger UI repos, use the strongest practical coverage: visual,
+  interaction, accessibility, themes, responsive states, and other key variants.
+- Minimum story coverage: every shared/public component, every meaningful
+  variant, and explicit empty/loading/error states when applicable.
+- Bug fixes should add or update a story that captures the broken state.
 
 ## Credit
 
