@@ -1,6 +1,6 @@
 # gstack-lite
 
-A condensed, binary-free port of [Garry Tan's gstack](https://github.com/garrytan/gstack), repackaged as portable Markdown workflow docs for AI coding agents. No Bun, no compiled binary, no dependencies.
+A condensed, binary-free port of [Garry Tan's gstack](https://github.com/garrytan/gstack), repackaged as portable Markdown workflow docs for AI coding agents. Six workflow modes, no Bun, no compiled binary, no dependencies.
 
 The workflow itself is **agent-agnostic**. Claude Code is one good adapter for
 it, but the repo is designed so any agent can use the Markdown docs directly.
@@ -17,13 +17,14 @@ it, but the repo is designed so any agent can use the Markdown docs directly.
 | Includes browser-oriented workflows and tooling | No Bun, no compiled binary, no dependency-heavy setup |
 | More tied to its native tool environment | Agent-agnostic by design |
 | Primary product is the packaged tool experience | Primary product is portable Markdown workflow docs |
-| UI/browser extras live in the main toolchain | Ships `gstack-lite-storybook.md` as a public React UI policy companion |
+| UI/browser extras live in the main toolchain | Ships `gstack-lite-storybook.md` and `gstack-lite-rubric.md` as public companion docs |
 
 ## Agent support
 
 - **Any coding agent**: start with `AGENTS.md`, then use `GSTACK_LITE.md`
 - **Claude Code**: can additionally package the split docs into `.claude/skills/`
 - **React repos**: use `gstack-lite-storybook.md` for Storybook/Chromatic policy
+- **Evaluation / benchmarking**: use `gstack-lite-rubric.md` or `/scorecard`
 
 ## Quick start
 
@@ -31,6 +32,8 @@ it, but the repo is designed so any agent can use the Markdown docs directly.
 2. Use `GSTACK_LITE.md` as the main workflow reference
 3. If your project is a React app with reusable components, also use
    `gstack-lite-storybook.md`
+4. If you are testing or benchmarking the workflow, also use
+   `gstack-lite-rubric.md`
 
 If you're using Claude Code, you can optionally package the split docs into
 `.claude/skills/` for native slash-command ergonomics.
@@ -49,10 +52,12 @@ File naming convention in this repo:
 | Review mode | `/review` | Structural audit for bugs that survive CI |
 | Ship mode | `/ship` | Sync, test, lint, push, open PR |
 | Retro mode | `/retro` | Git-based retrospective with per-contributor breakdown |
+| Scorecard mode | `/scorecard` | Structured rubric for testing repos, agents, or workflow runs |
 
 Companion docs shipped in this repo:
 - `AGENTS.md` — agent-neutral entry point
 - `GSTACK_LITE.md` — single-file workflow reference
+- `gstack-lite-rubric.md` — public evaluation rubric / scorecard
 - `gstack-lite-storybook.md` — public Storybook/Chromatic policy for React repos
 
 > **Need browser automation?** Workflows like `/browse`, `/qa`, and `/setup-browser-cookies` require tooling outside this repo. Install the full [gstack](https://github.com/garrytan/gstack) if you need those.
@@ -67,6 +72,7 @@ Use these docs directly in your project or agent context:
 
 - `AGENTS.md`
 - `GSTACK_LITE.md`
+- `gstack-lite-rubric.md` (for testing / benchmarking)
 - `gstack-lite-storybook.md` (for React repos)
 
 If your agent supports repository instruction files, `AGENTS.md` is the best
@@ -79,12 +85,13 @@ you can additionally package the split docs as native skills:
 
 ```bash
 mkdir -p .claude/skills
-cp PLANNING.md REVIEW.md SHIP-RETRO.md .claude/skills/
+cp PLANNING.md REVIEW.md SHIP-RETRO.md RUBRIC.md .claude/skills/
 ```
 
 Optionally also copy the public companion docs into your repo root or docs folder:
 - `AGENTS.md`
 - `GSTACK_LITE.md`
+- `gstack-lite-rubric.md`
 - `gstack-lite-storybook.md`
 
 ### 3. Add the workflow guidance to your agent instructions
@@ -99,6 +106,7 @@ Instead, reference the shipped docs directly or paste the sections you want to
 enforce into your project's instruction file:
 
 - `GSTACK_LITE.md` for the main planning/review/ship/retro workflow
+- `gstack-lite-rubric.md` for structured evaluation and benchmarking
 - `gstack-lite-storybook.md` for React Storybook/Chromatic defaults
 
 If you're using Claude Code and don't have a `CLAUDE.md` yet, create one and add
@@ -133,6 +141,7 @@ Plain-language example prompts:
 - "Use founder mode from `GSTACK_LITE.md` for this feature request."
 - "Use eng review mode from `GSTACK_LITE.md` and give me architecture, failure modes, and a test matrix."
 - "Use review mode from `GSTACK_LITE.md` on this diff."
+- "Use `gstack-lite-rubric.md` to score this repo test run."
 
 If you're using Claude Code with the optional adapter, you can use the slash
 commands directly:
@@ -143,6 +152,7 @@ commands directly:
 /review            ← structural audit before shipping
 /ship              ← sync, test, push, PR — non-interactive
 /retro             ← end-of-week retrospective from git history
+/scorecard         ← structured evaluation for testing repos, agents, or runs
 ```
 
 ### Recommended workflow
@@ -152,6 +162,7 @@ commands directly:
 ```
 
 Always run CEO review before Eng review. `/ship` is for a ready branch — not for deciding what to build.
+Use `/scorecard` when you want to benchmark the workflow itself or compare test runs.
 
 ## Opinionated frontend default
 
@@ -207,6 +218,8 @@ GSTACK_LITE_WORKFLOW.pdf  # exported workflow reference / shareable artifact
 PLANNING.md               # split planning skills
 REVIEW.md                 # split review skill
 SHIP-RETRO.md             # split ship + retro skills
+RUBRIC.md                 # split scorecard skill
+gstack-lite-rubric.md     # public evaluation rubric / scorecard
 gstack-lite-storybook.md  # Storybook / Chromatic companion policy
 gstack-graph.mindnode     # mind map source artifact
 README.md                 # setup + usage

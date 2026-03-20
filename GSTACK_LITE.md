@@ -1,6 +1,6 @@
 # gstack-lite — Complete Workflow Reference
 
-A condensed, dependency-free port of [Garry Tan's gstack](https://github.com/garrytan/gstack) — five workflow skills for AI-assisted development as a single file. No Bun, no compiled binary, no dependencies.
+A condensed, dependency-free port of [Garry Tan's gstack](https://github.com/garrytan/gstack) — six workflow modes for AI-assisted development as a single file. No Bun, no compiled binary, no dependencies.
 
 The slash-command names in this document are **mode labels**. If your coding
 agent does not support slash commands, invoke the same modes with plain-language
@@ -15,6 +15,7 @@ prompts instead.
 | `/review` | Staff Engineer | Structural audit for bugs that survive CI |
 | `/ship` | Release Engineer | Sync, test, lint, push, open PR |
 | `/retro` | Eng Manager | Git-based retrospective with per-contributor breakdown |
+| `/scorecard` | Evaluator | Structured rubric for testing repos, agents, or workflow runs |
 
 ### Recommended workflow
 
@@ -23,6 +24,7 @@ prompts instead.
 ```
 
 Always run CEO review before Eng review. `/ship` is for a ready branch — not for deciding what to build.
+Use `/scorecard` anytime you want to evaluate the workflow itself.
 
 ---
 
@@ -353,6 +355,62 @@ which metrics improved, which regressed, trend direction.
 
 ---
 
+## `/scorecard` — Evaluation Mode
+
+> *"Don't trust vibes. Score the run."*
+
+### When to use
+After testing `gstack-lite` on a repo, after a feature exercise, or when
+comparing two agents / repos / workflow installs.
+
+### Behavior
+
+1. **Read context.** Pull `gstack-lite-rubric.md` if present, plus `AGENTS.md`,
+   `CLAUDE.md`, relevant diffs, and test results.
+2. **Identify the target.** Are you scoring a repo install, a feature run, a
+   diff, or a side-by-side comparison?
+3. **Score each category** from **1–5** or **N/A**:
+   - Setup & discoverability
+   - Mode fidelity
+   - Planning quality
+   - Implementation discipline
+   - Review sharpness
+   - Ship readiness
+   - Storybook / Chromatic fit (React repos only)
+   - Friction & ergonomics
+4. **Cite evidence for every score.** No evidence → do not score above **3**.
+5. **Call out blockers separately.** Anything that would stop adoption today
+   belongs in a blockers list.
+6. **End with a verdict.** Use one of:
+   - `Adopt now`
+   - `Promising, iterate`
+   - `Not ready`
+
+### Output format
+
+```
+Overall: [X]/5 — [verdict]
+
+Blockers:
+- ...
+
+| Category | Score | Evidence | Next action |
+|---|---:|---|---|
+
+Top 3 strengths
+Top 3 gaps
+Recommended next test
+```
+
+### Rules
+- Use **N/A** instead of guessing.
+- Penalize friction honestly; repeated hand-holding is a real cost.
+- For React design systems or component libraries, missing Storybook / Chromatic
+  requirements should score poorly.
+- Be specific. Evidence beats vibes.
+
+---
+
 ## Setup (for Claude Code users)
 
 **Requirements:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code), Git.
@@ -368,6 +426,7 @@ mkdir -p .claude/skills
 #   .claude/skills/PLANNING.md       (/plan-ceo-review + /plan-eng-review)
 #   .claude/skills/REVIEW.md         (/review)
 #   .claude/skills/SHIP-RETRO.md     (/ship + /retro)
+#   .claude/skills/RUBRIC.md         (/scorecard)
 ```
 
 ## React + Storybook defaults
