@@ -240,9 +240,11 @@ Run this sequence non-interactively. No back-and-forth. No asking what to do nex
 
 2. **Run tests**
    ```bash
-   npm test -- --runInBand
-   npm run lint
-   npx tsc --noEmit
+   # Run this project's test, lint, and typecheck commands.
+   # These should come from this repo's CLAUDE.md or project documentation, e.g.:
+   #   project-test-command
+   #   project-lint-command
+   #   project-typecheck-command
    ```
    All must pass. If tests fail, fix root cause — never skip or comment out.
    If the repo is a React app with reusable components, also run the project's
