@@ -46,6 +46,8 @@ Work through the diff and look for:
 - Missing concurrency tests for race-prone code
 - Happy path only — no sad path, no edge cases
 - For LLM changes: are eval suites updated?
+- For React apps with components: are Storybook stories present for shared
+  components and key states, with interaction/a11y/visual regression automation?
 
 #### Output Format
 
@@ -91,6 +93,7 @@ known FP patterns in future runs.
 [ ] Retry logic: correct backoff, idempotent operations
 [ ] Auth: all new routes protected
 [ ] Tests: sad paths and edge cases covered
+[ ] React UI: Storybook coverage + automation present where applicable
 [ ] Escaping: no injection vectors
 [ ] Greptile comments triaged (if applicable)
 ```
