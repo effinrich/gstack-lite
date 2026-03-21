@@ -230,10 +230,11 @@ Run this sequence non-interactively. No back-and-forth. No asking what to do nex
 
 #### Pre-flight
 
-1. **Sync with main**
+1. **Sync with main** (rebase or merge, per project convention)
    ```bash
    git fetch origin
-   git rebase origin/main
+   # Rebase or merge with main, per project convention:
+   git rebase origin/main  # or: git merge origin/main
    ```
    Resolve any conflicts. If conflicts are non-trivial, surface them once and stop.
 
